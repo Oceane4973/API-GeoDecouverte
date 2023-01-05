@@ -12,7 +12,7 @@ API.use((req, res, next) => {
     next()
 })
 
-API.get('/images', (req, res)=>{
+API.get('/images', (req, res, next)=>{
     //res.json({images : dbManagerObject.getAllImages()})
     res.json("hey")
     //res.status(200).json("Erreur de connexion")
