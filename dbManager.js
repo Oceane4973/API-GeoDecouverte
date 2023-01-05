@@ -4,6 +4,9 @@ const fs = require('fs')
 let dbManager = new class DbManager {
   constructor() {}
 
+  getTest(){
+    return false
+  }
   getAllImages(){
     return JSON.parse(fs.readFileSync('./bd.json', 'utf8'))["Images"]
   }
