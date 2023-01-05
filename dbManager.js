@@ -23,7 +23,7 @@ let dbManager = new class DbManager {
   addImage(image){
     if(!(image.city == undefined || image.country == undefined || image.url == undefined)){
       image.id = this.getBdSize()+1
-
+      image.date = new Date()
       let tmp = this.getAllImages()
       tmp[image.id] = image
 

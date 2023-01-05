@@ -13,23 +13,24 @@ API.use((req, res, next) => {
 })
 
 API.get('/images', (req, res)=>{
-    res.json({images : dbManagerObject.getAllImages()})
-    res.status(200).json("Erreur de connexion")
+    //res.json({images : dbManagerObject.getAllImages()})
+    res.json(dbManagerObject)
+    //res.status(200).json("Erreur de connexion")
 })
 
 API.post('/images/add', (req, res)=>{
     res.json( dbManagerObject.addImage(req.body.image))
-    res.status(200).json("Erreur de connexion")
+    //res.status(200).json("Erreur de connexion")
 })
 
 API.get('/images/city_filter', (req, res)=>{
     res.json( dbManagerObject.getImageWithNameCity(req.body.city))
-    res.status(200).json("Erreur de connexion")
+    //res.status(200).json("Erreur de connexion")
 })
 
 API.get('/images/country_filter', (req, res)=>{
     res.json( dbManagerObject.getImageWithNameCountry(req.body.country))
-    res.status(200).json("Erreur de connexion")
+    //res.status(200).json("Erreur de connexion")
 })
 
 
@@ -56,7 +57,6 @@ API.listen(5000, ()=>{
     console.log(dbManagerObject.getImageWithNameCountry("France"))
     console.log(dbManagerObject.getImageWithNameCountry("USA"))
     console.log(dbManagerObject.getImageWithNameCountry(""))*/
-    
 })
 
 module.exports = API
