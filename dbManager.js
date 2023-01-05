@@ -9,26 +9,26 @@ let dbManager = function(){
   }
 
   dbManager.dbJsonSize = function(){
-    return this.getAllImages().length - 1
+    return this.getAllImages.length - 1
   }
 
   dbManager.getAllImages = function(){
-    return this.dbJson()
+    return this.dbJson
   }
 
   dbManager.getImageWithNameCity = function(city){
-    return this.dbJson().filter(image => image.city == city)
+    return this.dbJson.filter(image => image.city == city)
   }
 
   dbManager.getImageWithNameCountry = function(country){
-    return this.dbJson().filter(image => image.country == country)
+    return this.dbJson.filter(image => image.country == country)
   }
 
   dbManager.addImage = function(image){
     if(!(image.city == undefined || image.country == undefined || image.url == undefined)){
       fs.writeFile( 
         "./db.json", 
-        JSON.stringify(this.getAllImages().push(image)), 
+        JSON.stringify(this.getAllImages.push(image)), 
         (err) => { if (err) {return}}
       ) 
       return true
@@ -37,5 +37,3 @@ let dbManager = function(){
   }
   return dbManager
 }
-
-export default dbManager 

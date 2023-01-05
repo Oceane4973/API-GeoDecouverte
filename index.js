@@ -1,8 +1,8 @@
 const express = require('express')
-import dbManager from './dbManager.js'
+const dbManager = require('./dbManager.js')
 
 const API = express()
-const dbManagerObject = dbManager()
+const dbManagerObject = dbManager
 
 API.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
