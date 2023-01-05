@@ -1,6 +1,8 @@
 const express = require('express')
+import dbManager from './dbManager.js'
 
 const API = express()
+const dbManagerObject = dbManager()
 
 API.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -13,7 +15,7 @@ API.use((req, res, next) => {
 
 
 API.get('/images', (req, res, next)=>{
-    res.json({message : "hey"})
+    res.json({images : dbManagerObject.getAllImages()})
     res.status(200).json("Erreur de connexion")
 })
 

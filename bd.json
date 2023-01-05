@@ -1,0 +1,11 @@
+{
+    "Images": 
+    [
+      {
+        "id": 1,
+        "city": "Marseille",
+        "country": "France",
+        "url": "./images/2094742-200.png"
+      }
+    ]
+}
