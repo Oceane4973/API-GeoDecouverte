@@ -5,7 +5,7 @@
       "src": "index.js",
       "use": "@now/node",
       "config": {
-        "includeFiles": ["db.json","images/*"]
+        "includeFiles": ["bd.json","images/*"]
       }
     }
   ],
