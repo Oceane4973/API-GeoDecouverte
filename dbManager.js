@@ -1,39 +1,42 @@
 
 const fs = require('fs')
 
-let dbManager = function(){
-  let dbManager = {}
+let dbManager = new class DbManager {
+  constructor() {}
 
-  dbManager.dbJson = function(){
-    return JSON.parse(fs.readFileSync('./db.json', 'utf8'))['Images']
+  getAllImages(){
+    return JSON.parse(fs.readFileSync('./bd.json', 'utf8'))["Images"]
   }
 
-  dbManager.dbJsonSize = function(){
-    return this.getAllImages.length - 1
+  getBdSize(){
+    return this.getAllImages().length - 1
   }
 
-  dbManager.getAllImages = function(){
-    return this.dbJson
+  getImageWithNameCity(city){
+    return this.getAllImages().filter(image => image.city == city)
   }
 
-  dbManager.getImageWithNameCity = function(city){
-    return this.dbJson.filter(image => image.city == city)
+  getImageWithNameCountry(country){
+    return this.getAllImages().filter(image => image.country == country)
   }
 
-  dbManager.getImageWithNameCountry = function(country){
-    return this.dbJson.filter(image => image.country == country)
-  }
-
-  dbManager.addImage = function(image){
+  addImage(image){
     if(!(image.city == undefined || image.country == undefined || image.url == undefined)){
-      fs.writeFile( 
-        "./db.json", 
-        JSON.stringify(this.getAllImages.push(image)), 
+      image.id = this.getBdSize()+1
+
+      let tmp = this.getAllImages()
+      tmp[image.id] = image
+
+      fs.writeFileSync( 
+        "./bd.json",
+        JSON.stringify({ "Images": tmp  }), 
         (err) => { if (err) {return}}
       ) 
       return true
     }
     return false
   }
-  return dbManager
 }
+
+
+module.exports['dbManager'] = dbManager

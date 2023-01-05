@@ -1,8 +1,7 @@
 const express = require('express')
-const dbManager = require('./dbManager.js')
+const dbManagerObject = require('./dbManager.js').dbManager
 
 const API = express()
-const dbManagerObject = dbManager
 
 API.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -13,14 +12,51 @@ API.use((req, res, next) => {
     next()
 })
 
-
-API.get('/images', (req, res, next)=>{
-    res.json({images : dbManagerObject.getAllImages})
+API.get('/images', (req, res)=>{
+    res.json({images : dbManagerObject.getAllImages()})
     res.status(200).json("Erreur de connexion")
 })
 
+API.post('/images/add', (req, res)=>{
+    res.json( dbManagerObject.addImage(req.body.image))
+    res.status(200).json("Erreur de connexion")
+})
+
+API.get('/images/city_filter', (req, res)=>{
+    res.json( dbManagerObject.getImageWithNameCity(req.body.city))
+    res.status(200).json("Erreur de connexion")
+})
+
+API.get('/images/country_filter', (req, res)=>{
+    res.json( dbManagerObject.getImageWithNameCountry(req.body.country))
+    res.status(200).json("Erreur de connexion")
+})
+
+
 API.listen(5000, ()=>{
     console.log("API démarrée")
+
+    /*console.log(dbManagerObject.getAllImages())
+    console.log(dbManagerObject.addImage(
+        {
+            "country": "Africa",
+            "url": "./images/2094742-200.png"
+        }
+    ))
+    console.log(dbManagerObject.addImage(
+        {
+            "city": "Washigton DC",
+            "country": "USA",
+            "url": "./images/2094742-200.png"
+        }
+    ))
+    console.log(dbManagerObject.getBdSize())
+    console.log(dbManagerObject.getImageWithNameCity("Marseille"))
+    console.log(dbManagerObject.getImageWithNameCity("y"))
+    console.log(dbManagerObject.getImageWithNameCountry("France"))
+    console.log(dbManagerObject.getImageWithNameCountry("USA"))
+    console.log(dbManagerObject.getImageWithNameCountry(""))*/
+    
 })
 
 module.exports = API
