@@ -60,8 +60,3 @@ API.listen(5000, ()=>{
     console.log(dbManagerObject.getImageWithNameCountry("USA"))
     console.log(dbManagerObject.getImageWithNameCountry(""))*/
 })
-
-
-
-
-module.exports = API
