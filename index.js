@@ -18,6 +18,8 @@ API.get('/images', (req, res)=>{
     //res.status(200).json("Erreur de connexion")
 })
 
+
+/*
 API.post('/images/add', (req, res)=>{
     res.json( dbManagerObject.addImage(req.body.image))
     //res.status(200).json("Erreur de connexion")
@@ -31,7 +33,7 @@ API.get('/images/city_filter', (req, res)=>{
 API.get('/images/country_filter', (req, res)=>{
     res.json( dbManagerObject.getImageWithNameCountry(req.body.country))
     //res.status(200).json("Erreur de connexion")
-})
+})*/
 
 
 API.listen(5000, ()=>{
