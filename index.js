@@ -1,5 +1,5 @@
 const express = require('express')
-const dbManagerObject = require('./dbManager.js').dbManager
+//const dbManagerObject = require('./dbManager.js').dbManager
 
 const API = express()
 
@@ -14,7 +14,7 @@ API.use((req, res, next) => {
 
 API.get('/images', (req, res)=>{
     //res.json({images : dbManagerObject.getAllImages()})
-    res.json(dbManagerObject)
+    res.json("hey")
     //res.status(200).json("Erreur de connexion")
 })
 
@@ -60,5 +60,8 @@ API.listen(5000, ()=>{
     console.log(dbManagerObject.getImageWithNameCountry("USA"))
     console.log(dbManagerObject.getImageWithNameCountry(""))*/
 })
+
+
+
 
 module.exports = API
