@@ -15,7 +15,7 @@ API.use((req, res, next) => {
 
 
 API.get('/images', (req, res, next)=>{
-    res.json({images : dbManagerObject.getAllImages()})
+    res.json({images : dbManagerObject.getAllImages})
     res.status(200).json("Erreur de connexion")
 })
 
