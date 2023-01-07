@@ -43,13 +43,13 @@ API.post('/images/add', (req, res, next)=>{
     res.end()
 })
 
-API.get('/images/city_filter', (req, res, next)=>{
-    res.json( dbManagerObject.getImageWithNameCity(req.body.city))
+API.get('/images/city_filter/:city', (req, res, next)=>{
+    res.json( dbManagerObject.getImageWithNameCity(req.params.city))
     res.status(200).json("Erreur de connexion")
 })
 
-API.get('/images/country_filter', (req, res, next)=>{
-    res.json( dbManagerObject.getImageWithNameCountry(req.body.country))
+API.get('/images/country_filter/:country', (req, res, next)=>{
+    res.json( dbManagerObject.getImageWithNameCountry(req.params.country))
     res.status(200).json("Erreur de connexion")
 })
 
@@ -57,28 +57,5 @@ API.get('/images/country_filter', (req, res, next)=>{
 API.listen(5000, ()=>{
     console.log("API démarrée")
 })
-
-/*
-function PostImageTest(){
-
-    const nameFile = "graphe"
-
-    fetch(`http://localhost:5000/images/add`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-            {
-                city : "Washigton DC",
-                country: "USA",
-                image : fs.readFileSync(`./images/${nameFile}.png`)
-            }
-        )
-    })
-    .then(res => res.text())
-    .then(res =>  console.log(res))
-}*/
 
 module.exports = API
