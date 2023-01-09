@@ -44,12 +44,12 @@ API.post('/images/add', (req, res, next)=>{
 })
 
 API.get('/images/city_filter/:city', (req, res, next)=>{
-    res.json( dbManagerObject.getImageWithNameCity(req.params.city))
+    res.json( { images : dbManagerObject.getImageWithNameCity(req.params.city) })
     res.status(200).json("Erreur de connexion")
 })
 
 API.get('/images/country_filter/:country', (req, res, next)=>{
-    res.json( dbManagerObject.getImageWithNameCountry(req.params.country))
+    res.json( { images : dbManagerObject.getImageWithNameCountry(req.params.country) })
     res.status(200).json("Erreur de connexion")
 })
 
