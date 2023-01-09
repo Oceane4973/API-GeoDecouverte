@@ -11,6 +11,8 @@ L'API est hébergé sur Vercel.
 > 
 > /images  : récupération de toutes les images
 > 
+> /image/<FileName.png>  : récupération / affichage d'une image
+> 
 > /images/city_filter  : récupération de toutes les images avec trie sur la ville 
 > * paramètres : req.body.city
 >
