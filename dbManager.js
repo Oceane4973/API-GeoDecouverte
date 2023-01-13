@@ -4,7 +4,7 @@ const fs = require('fs')
 let dbManager = new class DbManager {
   constructor() {}
   
-  getAllImages(){
+  getAllImages(radius){
     return JSON.parse(fs.readFileSync('./bd.json', 'utf8'))["Images"]
   }
 
@@ -12,11 +12,11 @@ let dbManager = new class DbManager {
     return this.getAllImages().length - 1
   }
 
-  getImageWithNameCity(city){
+  getImageWithNameCity(city, radius){
     return this.getAllImages().filter(image => image.city == city)
   }
 
-  getImageWithNameCountry(country){
+  getImageWithNameCountry(country, radius){
     return this.getAllImages().filter(image => image.country == country)
   }
 

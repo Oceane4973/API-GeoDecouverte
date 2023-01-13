@@ -21,8 +21,8 @@ API.use('/image', express.static('images'))
 
 API.use(express.urlencoded({ extended: true }))
 
-API.get('/images', (req, res, next)=>{
-    res.json({images : dbManagerObject.getAllImages()})
+API.get('/images/:radius', (req, res, next)=>{
+    res.json({images : dbManagerObject.getAllImages(req.params.radius)})
     res.status(200).json("Erreur de connexion")
 })
 
@@ -43,13 +43,13 @@ API.post('/images/add', (req, res, next)=>{
     res.end()
 })
 
-API.get('/images/city_filter/:city', (req, res, next)=>{
-    res.json( { images : dbManagerObject.getImageWithNameCity(req.params.city) })
+API.get('/images/city_filter/:city/:radius', (req, res, next)=>{
+    res.json( { images : dbManagerObject.getImageWithNameCity(req.params.city, req.params.radius) })
     res.status(200).json("Erreur de connexion")
 })
 
-API.get('/images/country_filter/:country', (req, res, next)=>{
-    res.json( { images : dbManagerObject.getImageWithNameCountry(req.params.country) })
+API.get('/images/country_filter/:country/:radius', (req, res, next)=>{
+    res.json( { images : dbManagerObject.getImageWithNameCountry(req.params.country, req.params.radius) })
     res.status(200).json("Erreur de connexion")
 })
 

@@ -3,10 +3,13 @@ const fs = require('fs')
 
 const developmentMode = false
 
+
 var url = "http://localhost:5000"
 if(!developmentMode){
     url = "https://api-atelier-technique.vercel.app"
 }
+
+var RADIUS = 200
 
 let deployementTest = new class DeployementTest {
     constructor() {}
@@ -30,26 +33,26 @@ let deployementTest = new class DeployementTest {
         .then(res =>  console.log(res))
     }
 
-    getAll(){
-        fetch(`${url}/images`)
+    getAll(radius){
+        fetch(`${url}/images/${radius}`)
         .then(res => res.text())
         .then(res =>  console.log(res))
     }
 
-    searchByCity(city){
-        fetch(`${url}/images/city_filter/${city}`)
+    searchByCity(city, radius){
+        fetch(`${url}/images/city_filter/${city}/${radius}`)
         .then(res => res.text())
         .then(res =>  console.log(res))
     }
 
-    searchByCountry(country){
-        fetch(`${url}/images/country_filter/${country}`)
+    searchByCountry(country, radius){
+        fetch(`${url}/images/country_filter/${country}/${radius}`)
         .then(res => res.text())
         .then(res =>  console.log(res))
     }
 }
 
 deployementTest.addImage("imageTest")
-deployementTest.searchByCity("Washigton DC")
-deployementTest.searchByCountry("USA")
-deployementTest.searchByCountry("Africa")
+deployementTest.searchByCity("Washigton DC", RADIUS)
+deployementTest.searchByCountry("USA", RADIUS)
+deployementTest.searchByCountry("Africa", RADIUS)
