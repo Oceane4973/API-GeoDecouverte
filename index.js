@@ -1,8 +1,5 @@
 const express = require('express')
-const dbManagerObject = require('./dbManager.js').dbManager
-const { v4: uuidv4 } = require('uuid')
-const fetch = require('node-fetch-commonjs')
-const fs = require('fs')
+const dbManagerObject = new require('./dbManager.js').dbManager
 
 const API = express()
 
@@ -21,38 +18,41 @@ API.use('/image', express.static('images'))
 
 API.use(express.urlencoded({ extended: true }))
 
-API.get('/images/:radius', (req, res, next)=>{
-    res.json({images : dbManagerObject.getAllImages(req.params.radius)})
-    res.status(200).json("Erreur de connexion")
+API.get('/images/radius_filter/:lat/:lng/:radius', (req, res, next)=>{
+    res.json({ images : dbManagerObject.getImagesWithLatLng(req.params.lat, req.params.lng, req.params.radius)})
+    //res.end()
+})
+
+API.get('/images/all', (req, res, next)=>{
+    res.json({ images : dbManagerObject.getAllImages()})
+    //res.end()
 })
 
 API.post('/images/add', (req, res, next)=>{
-    const newDataImage = {
-        city : req.body.city,
-        country: req.body.country,
-        url : `./images/${uuidv4()}.png`,
-        date : new Date(),
+    if(req.body.lat == undefined|| req.body.lng == undefined|| req.body.image.data == undefined){
+        res.status(200).json("Erreur : données non conforme") 
     }
-
-    let buffer = Buffer.from(req.body.image.data, 'base64')
-    fs.writeFile(newDataImage.url, buffer, function (err) {
-        if (err) throw err
-    })
-
-    dbManagerObject.addImage(newDataImage)
-    res.end()
+    res.json({ reponse : dbManagerObject.addImage(req.body.lat, req.body.lng, req.body.image.data) })
+    //res.end()
 })
 
 API.get('/images/city_filter/:city/:radius', (req, res, next)=>{
-    res.json( { images : dbManagerObject.getImageWithNameCity(req.params.city, req.params.radius) })
-    res.status(200).json("Erreur de connexion")
+    dbManagerObject.AdressToLatlng(req.params.city).then(function(result){
+        const latlng = result.results[0].geometry.location
+        res.json({ images : dbManagerObject.getAllImages(latlng.lat, latlng.lng, req.params.radius) })
+        console.log(`${req.params.city} : ${latlng.lat}, ${latlng.lng}`) 
+    })
+    //res.end()
 })
 
 API.get('/images/country_filter/:country/:radius', (req, res, next)=>{
-    res.json( { images : dbManagerObject.getImageWithNameCountry(req.params.country, req.params.radius) })
-    res.status(200).json("Erreur de connexion")
+    dbManagerObject.AdressToLatlng(req.params.country).then(function(result){
+        const latlng = result.results[0].geometry.location
+        res.json({ images : dbManagerObject.getAllImages(latlng.lat, latlng.lng, req.params.radius) })
+        console.log(`${req.params.country} : ${latlng.lat}, ${latlng.lng}`) 
+    })
+    //res.end()
 })
-
 
 API.listen(5000, ()=>{
     console.log("API démarrée")

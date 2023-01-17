@@ -1,39 +1,115 @@
 
 const fs = require('fs')
+const fetch = require('node-fetch-commonjs')
+const { ImageModel } = require('./imageModel.js')
+const { sqrt, pi, sin, cos, acos, abs } = require('mathjs')
 
-let dbManager = new class DbManager {
-  constructor() {}
+/**
+ * These is the database interface class
+ */
+const dbManager = new class DbManager {
+  /**
+   * The constructor
+   */
+  constructor() {
+    this.params = {
+      access_key: 'AIzaSyCwtN-3et4XEgSNZHGnz8jFP1jlDUQnpHg'
+    }
+  }
   
-  getAllImages(radius){
+  /**
+   * 
+   * @param {Integer} lat 
+   * @param {Integer} lng 
+   * @param {Integer} radius 
+   * @returns the filtered list of ImageModel on defined radius 
+   */
+  getImagesWithLatLng(lat, lng, radius){
+    return JSON.parse(
+      fs.readFileSync('./bd.json', 'utf8'))["Images"].filter(
+        image => 
+          this.calculDistance(
+            [lat, lng], 
+            [image.geometry.lat, image.geometry.lng]
+          ) <= radius 
+      )
+  }
+
+  getAllImages(){
     return JSON.parse(fs.readFileSync('./bd.json', 'utf8'))["Images"]
   }
 
+  /**
+   * 
+   * @returns the number of items on the database
+   */
   getBdSize(){
-    return this.getAllImages().length - 1
+    return JSON.parse(fs.readFileSync('./bd.json', 'utf8'))["Images"].length - 1
   }
 
-  getImageWithNameCity(city, radius){
-    return this.getAllImages().filter(image => image.city == city)
+  /**
+   * 
+   * @param {ImageModel} image 
+   * @returns nothing
+   * 
+   * To save a pictures in the ./images directory and update database adding the new image
+   */
+  addImage(lat, lng, data){
+    //Turned data into ImageModel
+    const image = new ImageModel(lat, lng)
+
+    //Save the image picture at ./images
+    let buffer = Buffer.from(data, 'base64')
+    fs.writeFile(image.url, 
+      buffer, 
+      (err) => { if (err) {return false}}
+    )
+
+    //Get the content of database and add it the new image
+    image.id = this.getBdSize()+1
+    let tmp = this.getAllImages()
+    tmp[image.id] = image
+
+    //Update the database
+    fs.writeFileSync( 
+      "./bd.json",
+      JSON.stringify({ "Images": tmp  }), 
+      (err) => { if (err) {return false}}
+    )
+    return true
   }
 
-  getImageWithNameCountry(country, radius){
-    return this.getAllImages().filter(image => image.country == country)
+  /**
+   * 
+   * @param { [Integer](2) } cord1 
+   * @param { [Integer](2) } cord2 
+   * @returns an integer that is a distance between two coordinates
+   * 
+   */
+  calculDistance(cord1 , cord2) {
+    var radlat1 = pi * cord1[0]/180
+    var radlat2 = pi * cord2[0]/180
+    var theta = cord1[1]-cord2[1]
+    var radtheta = pi * theta/180
+    var dist = sin(radlat1) * sin(radlat2) + cos(radlat1) * cos(radlat2) * cos(radtheta)
+	
+    if (dist > 1) { dist = 1 }
+		
+    dist = acos(dist)
+    dist = dist * 180/pi
+    dist = dist * 60 * 1.1515
+    return abs(parseInt(dist * 1.609344))
   }
 
-  addImage(image){
-    if(!(image.city == undefined || image.country == undefined || image.url == undefined || image.date == undefined)){
-      image.id = this.getBdSize()+1
-      let tmp = this.getAllImages()
-      tmp[image.id] = image
-
-      fs.writeFileSync( 
-        "./bd.json",
-        JSON.stringify({ "Images": tmp  }), 
-        (err) => { if (err) {return}}
-      ) 
-      return true
-    }
-    return false
+  /**
+   * 
+   * @param {String} address 
+   * @returns the LatLng of parameter
+   */
+  async AdressToLatlng(address){
+    const reponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${this.params.access_key}`)
+    const data = await reponse.json()
+    return data
   }
 }
 
