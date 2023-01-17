@@ -2,7 +2,9 @@
 const fs = require('fs')
 const fetch = require('node-fetch-commonjs')
 const { ImageModel } = require('./imageModel.js')
-const { sqrt, pi, sin, cos, acos, abs } = require('mathjs')
+const { sqrt, sin, cos, acos, abs } = require('mathjs')
+const pi = 3.14159265358979323846264338327950288419716939937510582
+
 
 /**
  * These is the database interface class
