@@ -54,9 +54,9 @@ const dbManager = new class DbManager {
    * 
    * To save a pictures in the ./images directory and update database adding the new image
    */
-  addImage(lat, lng, data){
+  addImage(lat, lng, data, city, country){
     //Turned data into ImageModel
-    const image = new ImageModel(lat, lng)
+    const image = new ImageModel(lat, lng, city, country)
 
     //Save the image picture at ./images
     let buffer = Buffer.from(data, 'base64')
@@ -86,20 +86,22 @@ const dbManager = new class DbManager {
    * @returns an integer that is a distance between two coordinates
    * 
    */
-  calculDistance(cord1 , cord2) {
-    var radlat1 = pi * cord1[0]/180
-    var radlat2 = pi * cord2[0]/180
+  calculDistance(cord1, cord2) {
+    var radlat1 = Math.PI * cord1[0]/180
+    var radlat2 = Math.PI * cord2[0]/180
     var theta = cord1[1]-cord2[1]
-    var radtheta = pi * theta/180
-    var dist = sin(radlat1) * sin(radlat2) + cos(radlat1) * cos(radlat2) * cos(radtheta)
-	
+    var radtheta = Math.PI * theta/180
+    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
+    
     if (dist > 1) { dist = 1 }
-		
-    dist = acos(dist)
-    dist = dist * 180/pi
+      
+    dist = Math.acos(dist)
+    dist = dist * 180/Math.PI
     dist = dist * 60 * 1.1515
-    return abs(parseInt(dist * 1.609344))
-  }
+    console.log(parseInt(dist * 1.609344))
+    return parseInt(dist * 1.609344)
+}
+
 
   /**
    * 
@@ -111,6 +113,17 @@ const dbManager = new class DbManager {
     const data = await reponse.json()
     return data
   }
+
+  /**
+   * 
+   * @param { { Double, Double }} LatLng 
+   * @returns the city and the country of LatLng parameter
+   */
+  async LatlngToAdress(LatLng){
+    const reponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${LatLng.lat},${LatLng.lng}&key=${this.params.access_key}`)
+    const data = await reponse.json()
+    return data
+  }     
 }
 
 

@@ -32,14 +32,19 @@ API.post('/images/add', (req, res, next)=>{
     if(req.body.lat == undefined|| req.body.lng == undefined|| req.body.image.data == undefined){
         res.status(200).json("Erreur : données non conforme") 
     }
-    res.json({ reponse : dbManagerObject.addImage(req.body.lat, req.body.lng, req.body.image.data) })
+    dbManagerObject.LatlngToAdress({lat : req.body.lat, lng : req.body.lng}).then(function(result){
+        const formatted_address = result.plus_code.compound_code
+        const city = formatted_address.substring(formatted_address.split(' ')[0].length).split(',')[0].substring(1)
+        const country = formatted_address.split(' ')[formatted_address.split(' ').length-1]
+        res.json({ reponse : dbManagerObject.addImage(req.body.lat, req.body.lng, req.body.image.data, city, country) })
+    })
     //res.end()
 })
 
 API.get('/images/city_filter/:city/:radius', (req, res, next)=>{
     dbManagerObject.AdressToLatlng(req.params.city).then(function(result){
         const latlng = result.results[0].geometry.location
-        res.json({ images : dbManagerObject.getAllImages(latlng.lat, latlng.lng, req.params.radius) })
+        res.json({ images : dbManagerObject.getImagesWithLatLng(latlng.lat, latlng.lng, req.params.radius) })
         console.log(`${req.params.city} : ${latlng.lat}, ${latlng.lng}`) 
     })
     //res.end()
@@ -48,7 +53,7 @@ API.get('/images/city_filter/:city/:radius', (req, res, next)=>{
 API.get('/images/country_filter/:country/:radius', (req, res, next)=>{
     dbManagerObject.AdressToLatlng(req.params.country).then(function(result){
         const latlng = result.results[0].geometry.location
-        res.json({ images : dbManagerObject.getAllImages(latlng.lat, latlng.lng, req.params.radius) })
+        res.json({ images : dbManagerObject.getImagesWithLatLng(latlng.lat, latlng.lng, req.params.radius) })
         console.log(`${req.params.country} : ${latlng.lat}, ${latlng.lng}`) 
     })
     //res.end()
