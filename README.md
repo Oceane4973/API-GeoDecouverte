@@ -21,22 +21,22 @@
 Les données échangées avec l'API sont structurées sous le format suivant :
 
 ```json
-{
-  "Images": [
-    {
-      "id": 1,
-      "city": "Paris",
-      "country": "France",
-      "url": "https://example.com/image1.png"
-    },
-    {
-      "id": 2,
-      "city": "Lyon",
-      "country": "France",
-      "url": "https://example.com/image2.png"
-    }
+"Images": 
+    [
+      {
+        "id": < id >,
+        "city": < city >,
+        "country": < country >,
+        "filename" : < filename >,
+        "geometry" : {
+            "lat" : < latitude >,
+            "lng" : < longitude >,
+        }
+        "url": < url >,
+        "date" : < date >
+      },
+      {...}
   ]
-}
 ```
 
 ## Hébergement
